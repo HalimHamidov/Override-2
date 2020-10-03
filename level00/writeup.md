@@ -18,10 +18,10 @@ Une comparaison de notre mot de passe a 0x149c (5276).
 
 ![image](https://user-images.githubusercontent.com/29956389/94953569-0eabdc80-04e8-11eb-9fb4-0cafb3240122.png)
 
-Les deux issue, suite a la condition, qui execute soit `system(/bin/sh)`, soit .
+Les deux issue, suite a la condition, qui execute `system(/bin/sh)`, ou quitte le programme.
 
 ![image](https://user-images.githubusercontent.com/29956389/94953752-592d5900-04e8-11eb-9e38-8b17953214fb.png)
 
-Il suffit donc de `./level00 5276`
+Il suffit donc de passer 5276 en mot de passe.
 
 ![image](https://user-images.githubusercontent.com/29956389/94953879-8da11500-04e8-11eb-9b4f-f1a783c5cbc0.png)
