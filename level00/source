@@ -1,0 +1,45 @@
+int main(void)
+{
+	// mov    DWORD PTR [esp],0x80485f0
+    // call   0x8048390 <puts@plt>
+	puts("***********************************");
+	
+	// mov    DWORD PTR [esp],0x8048614
+	// call   0x8048390 <puts@plt>
+	puts("* \t     -Level00 -\t\t  *");
+	
+	// mov    DWORD PTR [esp],0x80485f0
+    // call   0x8048390 <puts@plt>
+	puts("***********************************");
+
+	// mov    eax,0x804862c
+    // mov    DWORD PTR [esp],eax
+    // call   0x8048380 <printf@plt>
+	printf("Password:");
+	
+	// mov    eax,0x8048636
+    // lea    edx,[esp+0x1c]
+    // mov    DWORD PTR [esp+0x4],edx
+    // mov    DWORD PTR [esp],eax
+    // call   0x80483d0 <__isoc99_scanf@plt>
+	scanf("%d", esp+0x1c);
+	
+	// cmp    eax, 0x149c
+	if (esp+0x1c == 5276)
+	{
+		// mov    DWORD PTR [esp],0x8048639
+   		// call   0x8048390 <puts@plt>
+		puts("\nAuthenticated!");
+		
+   		// mov    DWORD PTR [esp],0x8048649
+   		// call   0x80483a0 <system@plt>
+		system("/bin/sh");
+	}
+	else
+	{
+		// mov    DWORD PTR [esp],0x8048651
+   		// call   0x8048390 <puts@plt>
+		puts("\nInvalid Password!");
+	}
+	return (1);
+}
