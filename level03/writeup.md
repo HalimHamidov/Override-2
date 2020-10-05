@@ -14,4 +14,4 @@ Si la difference est inferieur a 22, une multiplication par deux puis l'ajout d'
 
 La fonction decrypt a une chaine de caractere fixe alloue en debut de fonction. Un strlen est effectue sur cette chaine pour definir sa longueur, puis l'operation qui decrypte est effectuee: pour chaque caractere de cette chaine, un XOR est effectue avec la difference entre le nombre fixe 0x1337d00d et notre nombre passe en paramettre. Une fois que tout les characteres de la chaine sont passe par cette opperation, la string resultante est comparee a la string "Congratulations!". Si elles sont identiques, nous avons acces a un shell.
 
-Fort de tout ces elements, nous avons fait un programme nous permettant de savoir quel nombre passer au programme pour nous donner acces au shell.
+Fort de tout ces elements, nous avons fait un programme nous permettant de savoir quel nombre passer au programme pour nous donner acces au shell. Ce nombre etant 322424827.
