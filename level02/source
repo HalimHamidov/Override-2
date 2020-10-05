@@ -85,9 +85,9 @@ main
    0x0000000000400910 <+252>:   mov    esi, 0x400bf5      ; contains "\n"
    0x0000000000400915 <+257>:   mov    rdi, rax
    0x0000000000400918 <+260>:   call   0x4006d0 <strcspn@plt>
-   strcspn(buffer2, "\n");
-   
    0x000000000040091d <+265>:   mov    BYTE PTR [rbp+rax*1-0xa0],0x0
+   buffer2[strcspn(buffer2, "\n")] = 0;
+   
    0x0000000000400925 <+273>:   cmp    DWORD PTR [rbp-0xc],0x29
    0x0000000000400929 <+277>:   je     0x40097d <main+361>
    if (var != 0x29)
