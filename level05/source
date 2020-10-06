@@ -1,0 +1,24 @@
+#include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+int main(void)
+{
+	FILE *file;
+	char buffer[100];
+	int i;
+	int len;
+
+	i = 0;
+	fgets(buffer, 100, stdin);
+
+	len = strlen(buffer);
+	while ( i < len)
+	{
+		if (buffer[i] >= 'A' && buffer[i] <= 'Z')
+			buffer[i] ^= 0x20;
+	}
+	printf(buffer);
+	exit(0);
+	return 0;
+}
