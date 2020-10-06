@@ -1,6 +1,6 @@
-main
-
-0x0000000000400814 <+0>:        push   rbp
+int main()
+{
+   0x0000000000400814 <+0>:     push   rbp
    0x0000000000400815 <+1>:     mov    rbp,rsp
    
    0x0000000000400818 <+4>:     sub    rsp,0x120
@@ -139,7 +139,6 @@ main
    0x00000000004009b6 <+418>:   mov    rdi,rax
    0x00000000004009b9 <+421>:   mov    eax,0x0
    0x00000000004009be <+426>:   call   0x4006c0 <printf@plt>
-   
    
    
    0x00000000004009c3 <+431>:   mov    rax,QWORD PTR [rip+0x20087e]        # 0x601248 <stdin@@GLIBC_2.2.5>
