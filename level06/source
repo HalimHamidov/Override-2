@@ -66,13 +66,13 @@ int auth(char *login_buffer, unsigned int serial)
 		int nb = (login_buffer[3] ^ 0x1337) + 0x5eeded
 		
    		0x08048806 <+190>:   mov    DWORD PTR [ebp-0x14],0x0
-		int something = 0;
+		int i = 0;
 		
    		0x0804880d <+197>:   jmp    0x804885b <auth+275>
 		0x0804885b <+275>:   mov    eax,DWORD PTR [ebp-0x14]
    		0x0804885e <+278>:   cmp    eax,DWORD PTR [ebp-0xc]
    		0x08048861 <+281>:   jl     0x804880f <auth+199>
-		while (something < login_length)
+		while (i < login_length)
 		{
 			0x0804880f <+199>:   mov    eax,DWORD PTR [ebp-0x14]
    			0x08048812 <+202>:   add    eax,DWORD PTR [ebp+0x8]
@@ -88,7 +88,8 @@ int auth(char *login_buffer, unsigned int serial)
 			
 			/* chiffrage ? */
 			0x08048823 <+219>:   mov    eax,DWORD PTR [ebp-0x14]
-   			0x08048826 <+222>:   add    eax,DWORD PTR [ebp+0x8]
+   			0x08048826 <+222>:   add    eax,DWORD PTR [ebp+0x8]  ; eax = login_buffer[i] 
+			
    			0x08048829 <+225>:   movzx  eax,BYTE PTR [eax]
    			0x0804882c <+228>:   movsx  eax,al
    			0x0804882f <+231>:   mov    ecx,eax
@@ -106,6 +107,7 @@ int auth(char *login_buffer, unsigned int serial)
    			0x08048850 <+264>:   sub    edx,eax
    			0x08048852 <+266>:   mov    eax,edx
    			0x08048854 <+268>:   add    DWORD PTR [ebp-0x10],eax
+			
    			0x08048857 <+271>:   add    DWORD PTR [ebp-0x14],0x1
    			++i;
 		}
