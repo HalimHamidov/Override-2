@@ -19,7 +19,7 @@ int auth(char *login_buffer, unsigned int serial)
    0x08048772 <+42>:    mov    DWORD PTR [esp],eax
    0x08048775 <+45>:    call   0x80485d0 <strnlen@plt>
    0x0804877a <+50>:    mov    DWORD PTR [ebp-0xc],eax
-   size_t login_length = strlen(login_buffer, 0x20);
+   size_t login_length = strnlen(login_buffer, 0x20);
   
    0x0804877d <+53>:    push   eax
    0x0804877e <+54>:    xor    eax,eax
@@ -106,7 +106,8 @@ int auth(char *login_buffer, unsigned int serial)
    			0x0804884e <+262>:   mov    edx,ecx
    			0x08048850 <+264>:   sub    edx,eax
    			0x08048852 <+266>:   mov    eax,edx
-   			0x08048854 <+268>:   add    DWORD PTR [ebp-0x10],eax
+   			0x08048854 <+268>:   add    DWORD PTR [ebp-0x10],eax  ; nb
+			nb += $eax;
 			
    			0x08048857 <+271>:   add    DWORD PTR [ebp-0x14],0x1
    			++i;
