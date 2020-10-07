@@ -32,6 +32,10 @@ $ commands 1
 > end
 ```
 
+On contourne la vérification anti-débogage et on peut afficher le contenue des variable poussé sur la stack lors de la vérification:
+
+![image](https://user-images.githubusercontent.com/29956389/95352071-25747980-08c2-11eb-8e27-62d50929ef9c.png)
+
 ![image](https://user-images.githubusercontent.com/29956389/95351280-599b6a80-08c1-11eb-9659-ed3e0e088e26.png)
 
 ![image](https://user-images.githubusercontent.com/29956389/95351359-7041c180-08c1-11eb-895a-f452bb77a83c.png)
