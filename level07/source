@@ -24,7 +24,7 @@ int get_unum()
 	return (unum);
 }
 
-int store_number(char *number, int array[25])
+int store_number(char *database)
 {
 	//space 40
 	unsigned int number = 0;   ebp-0x10
@@ -44,27 +44,31 @@ int store_number(char *number, int array[25])
   	0x08048676 <+70>:    mov    eax,ecx			; index
    	0x08048678 <+72>:    mul    edx				; mutlp $eax by edx => index * 0xaaaaaaab
 								; save most significant 32 bits of the operation in EDX
-   	0x0804867a <+74>:    shr    edx,1			; edx >> 1
+								; equivalent to index / 3 
+								
+   	0x0804867a <+74>:    shr    edx,1			; edx >> 1, equivalent to edx / 2
    	0x0804867c <+76>:    mov    eax,edx			; eax = edx
-   	0x0804867e <+78>:    add    eax,eax			; eax *= 2
-   	0x08048680 <+80>:    add    eax,edx			; eax += edx
+   	0x0804867e <+78>:    add    eax,eax			; eax *= 2 
+								; Those 3 lines are equivalent to `mov eax, edx` 
+								
+   	0x08048680 <+80>:    add    eax,edx			; eax += edx   or   eax = eax * 1.5 
+								
+								; Now we only done '(index / 3) * 1.5'   -   $eax holds this value here
+								
    	0x08048682 <+82>:    mov    edx,ecx			; edx = index;
-   	0x08048684 <+84>:    sub    edx,eax			; edx = index - eax
+   	0x08048684 <+84>:    sub    edx,eax			; edx = index - eax	=>	index = (index / 3) * 1.5
 	
-   	0x08048686 <+86>:    test   edx,edx			
+   	0x08048686 <+86>:    test   edx,edx			; equivalent to index % 3 == 0
    	0x08048688 <+88>:    je     0x8048697 <store_number+103>
 	
-	if (result)
+	if(index % 3 == 0 ||number >> 24 == 183)
 	{
-		if( nbr >> 24 == 183)
-		{
-			puts(" *** ERROR! ***");
-			puts("   This index is reserved for wil!");
-			puts(" *** ERROR! ***");
-		}
+		puts(" *** ERROR! ***");
+		puts("   This index is reserved for wil!");
+		puts(" *** ERROR! ***");
 	}
-	index = index << 2;
-	array[index] = nbr;
+	// index = index << 2;  ?? shl 0x2 on database, wtf?
+	database[index] = nbr;
 	return (0);
 }
 
@@ -92,14 +96,14 @@ int main(int ac, char **av, char **env)
 	char *input_buffer;
 	
 	// <main+110> lea    ebx,[esp+0x24]	;
-	char	le_buffer[100];
+	char	database[100];
 	
 	// mov    eax,0x0
    	// mov    edx,0x64
         // mov    edi,ebx
         // mov    ecx,edx
         // rep stos DWORD PTR es:[edi], eax
-	memset(le_buffer, 0, 100);
+	memset(database, 0, 100);
 	
 	// <+130>: jmp    0x80487ea <main+199>
 	// <+199>: mov    eax,DWORD PTR [esp+0x1c]	; av
@@ -139,7 +143,7 @@ int main(int ac, char **av, char **env)
  			// mov    DWORD PTR [esp],eax
    			// call   0x8048630 <store_number>		; Just one arg
 			// <+460>:   mov    DWORD PTR [esp+0x1b4],eax	; simple variable, not buffer[0]
-			return_value = store_number(le_buffer);
+			return_value = store_number(database);
 		}	
 		else if (strncmp(input_buffer, "read", 4) == 0)
 		{
@@ -147,7 +151,7 @@ int main(int ac, char **av, char **env)
    			// mov    DWORD PTR [esp],eax
    			// call   0x80486d7 <read_number>
    			// mov    DWORD PTR [esp+0x1b4],eax
-			return_value = read_number(le_buffer);
+			return_value = read_number(database);
 		}	
 		else if (strncmp(input_buffer, "quit", 4) == 0)
 			break;
