@@ -1,0 +1,111 @@
+#include <stdio.h>
+#include <string.h>
+
+void clear_stdin()
+{
+	unsigned char c;
+
+	c = 0;
+	do {
+		c = getchar();
+		if (c == 0xa)
+			return;
+	} while (c != 0xff);
+}
+
+int get_unum()
+{
+	//space 40
+	unsigned int unum;
+
+	fflush(stdout);
+	scanf("%u", &unum);
+	clear_stdin();
+	return (unum);
+}
+
+int store_number(char *number, int array[25])
+{
+	//space 40
+	unsigned int nbr = 0;
+	unsigned int index = 0;
+	unsigned int result = 4242424;
+
+	printf(" Number: ");
+	nbr = get_unum();
+	printf(" Number: ");
+	index = get_unum();
+	// exc = index;
+	// num_magique = 0xaaaaaaab
+	// edx = index * num_magique
+	// edx = edx >> 1
+	// eax = edx * 2
+	// eax += edx
+	// edx = index - eax
+	// Result = edx
+
+	if (result)
+	{
+		if( nbr >> 24 == 183)
+		{
+			puts(" *** ERROR! ***");
+			puts("   This index is reserved for wil!");
+			puts(" *** ERROR! ***");
+		}
+	}
+	index = index << 2;
+	array[index] = nbr;
+	return (0);
+}
+
+int read_number(char *number, int array[25])
+{
+	//space 40
+	unsigned int index;
+
+	printf(" Index: ");
+	index = get_unum();
+
+	printf(" Number at data[%u] is %u\n", index, array[index << 2]);
+	return (0);
+}
+
+int main(int ac, char **av, char **env)
+{
+	//space 464
+	char buffer[20] = {0,};
+	int array[25];
+	char **name;
+	char **first_env;
+
+	name = av;
+	first_env = env;
+	while (*name[0] != '\0')
+	{
+		memset(name, 0, strlen(*name));
+		name += 1;
+	}
+	while (*first_env[0] != '\0')
+	{
+		memset(env, 0, strlen(*first_env));
+		env += 1;
+	}
+	while(1)
+	{
+		fgets(buffer, 20, stdin);
+		buffer[strlen(buffer) - 1] = '\0'; // Removes the trailing '\n';
+		if (strcmp(buffer, "store") == 0)
+			buffer[0] = store_number(buffer, array);
+		else if (strcmp(buffer, "read") == 0)
+			buffer[0] = read_number(buffer, array);
+		else if (strcmp(buffer, "quit") == 0)
+			break;
+		if (*(int *)buffer == 0)
+		{
+			printf(" Completed %s command successfully\n", buffer + 4);
+		}
+		else
+			printf(" Failed to do %s command\n", buffer + 4);
+	}
+	return 0;
+}
