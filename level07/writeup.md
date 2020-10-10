@@ -24,7 +24,7 @@ while (env[i] != 0)
 
 Une fois le code désassemblé, on observe que le tableau qui stocke les nombres a 100 index: `char	database[100];`, mais aucune vérification est faite sur l'index que nous donnons, nous pouvons donc en theorie écrire ou nous voulons.
 
-On peut donc stocker notre shellcode directement dans le tableau, et réécrire l'eip pour qu'il pointe sur notre shellcode.
+On peut donc en theorie réécrire l'eip pour qu'il pointe sur du shellcode stocké dans le tableau.
 
 Avec la structure du code, on tente donc de trouver l'eip stocké lors de l'appel a main:
 
@@ -132,7 +132,9 @@ Program received signal SIGSEGV, Segmentation fault.
 0xdeadbeef in ?? ()	<-- Nice
 ```
 
-Utilisons a présent une attaque ret2libc:
+Stocker tout un shellcode dans un tableau qui bloque chaque troisème entrée est possible, mais long et fastidieux, car il faudrait entre chque instruction une par une, et calculer l'overflow de l'unsigned int pour contourner la protection.
+
+Utilisons donc plutot une attaque ret2libc:
   - On sait que l'eip `0xffffd70c` est stocké a l'index+114 soit `1073741938`, c'est la qu'on écrira l'adresse du syscall `system`.
   - L'index + 115 est l'adresse retour, on peut y mettre l'adresse d'exit si on souhaite quitter le programme proprement.
   - L'index + 116 doit contenir notre string `/bin/sh`
