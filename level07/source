@@ -64,8 +64,9 @@ int store_number(char *database)
 		puts("   This index is reserved for wil!");
 		puts(" *** ERROR! ***");
 	}
-	// index = index << 2;  ?? shl 0x2 on database, wtf?
-	database[index] = nbr;
+	// index = index << 2; 
+	// <+149>:   shl    eax,0x2
+	database[index << 2] = nbr;
 	return (0);
 }
 
