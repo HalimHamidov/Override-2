@@ -161,7 +161,7 @@ Start Addr   End Addr       Size     Offset objfile
     0xf7fcd000 0xf7fcf000     0x2000   0x1a0000 /lib32/libc-2.15.so
     0xf7fcf000 0xf7fd0000     0x1000   0x1a2000 /lib32/libc-2.15.so
 (gdb) find 0xf7e2c000,0xf7fd0000,"/bin/sh"
-0xf7f897ec	<-- ici
+0xf7f897ec		<-- ici
 1 pattern found.
 (gdb) p 0xf7f897ec
 $12 = 4160264172	<-- en décimal
