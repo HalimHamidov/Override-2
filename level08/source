@@ -1,0 +1,99 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <fcntl.h>
+#include <unistd.h>
+
+void log_wrapper(char *string, FILE *log, char *filename)
+{
+	/* Fonction chargée d'ecrire dans le logfile, non essentielle pour l'exploit
+	 * */
+	return;
+}
+
+int main(int ac, char** av)
+{
+	// data 176
+	char buffer[100]; // [rbp-0x70]
+	int control = -1;
+	unsigned char eof = 15;  //End of file control character
+	FILE *log;
+	FILE *src;
+
+	if (ac != 2)
+	{
+		printf("Usage: %s filename", av[0]);
+	}
+	if ((log = fopen("./backups/.log", "w")) == NULL)
+	{
+		printf("ERROR: Failed to open %s\n", "./backups/.log");
+		exit(1);
+	}
+	log_wrapper("Starting back up: ", log, av[1]);
+	if((src = fopen(av[1], "r")) == NULL)
+	{
+		printf("ERROR: Failed to open %s\n", av[1]);
+		exit(1);
+	}
+	//<main+286>     lea    rax,[rbp-0x70]
+	//<main+290>     mov    rcx,QWORD PTR [rdx]
+	//<main+290>     mov    rcx,QWORD PTR [rdx]
+	//<main+293>     mov    QWORD PTR [rax],rcx
+ 	*(uint64_t *)buffer = *(uint64_t *)"./backups/";
+
+	//<main+296>     movzx  ecx,WORD PTR [rdx+0x8]
+	//<main+300>     mov    WORD PTR [rax+0x8],cx
+	*((uint16_t *)buffer + 4) = ((uint16_t *)"./backups/")[4];
+
+	//<main+304>     movzx  edx,BYTE PTR [rdx+0xa]
+	//<main+308>     mov    BYTE PTR [rax+0xa],dl
+	buffer[10] = "./backups/"[10];
+
+	//<main+311>     lea    rax,[rbp-0x70]
+	//<main+315>     mov    QWORD PTR [rbp-0xa8],0xffffffffffffffff
+	//<main+326>     mov    rdx,rax
+	//<main+329>     mov    eax,0x0
+	//<main+334>     mov    rcx,QWORD PTR [rbp-0xa8]
+	//<main+341>     mov    rdi,rdx
+	//<main+344>     repnz scas al,BYTE PTR es:[rdi]
+	//<main+346>     mov    rax,rcx
+	//<main+349>     not    rax
+	//<main+352>     lea    rdx,[rax-0x1]
+	//Strlen sur le buffer dont le resultat est gardé en registre
+
+	//<main+356>     mov    eax,0x63
+	//<main+361>     mov    rcx,rax
+	//<main+364>     sub    rcx,rdx
+	// 99 - Resultat du strlen
+
+	//<main+370>     mov    rax,QWORD PTR [rbp-0xa0]
+	//<main+377>     add    rax,0x8
+	//<main+381>     mov    rax,QWORD PTR [rax]
+	//Recuperation de av[1]
+
+	//<main+387>     lea    rax,[rbp-0x70]
+	//<main+391>     mov    rsi,rcx
+	//<main+394>     mov    rdi,rax
+	//Recuperation de notre buffer et mis sur la stack pour appel
+
+	strncat(buffer, av[1], 99 - strlen(buffer));
+
+	//<main+406>     mov    edx,0x1b0
+	//<main+411>     mov    esi,0xc1
+	//flags and mode
+	control = open(buffer, O_WRONLY, S_IRWXU | S_IRUSR | S_IWUSR | S_IRWXG | S_IRGRP | S_IWGRP);
+
+	if (control < 0)
+	{
+		printf("ERROR: Failed to open %s%s\n", "./backups", buffer);
+		exit(1);
+	}
+	while((eof = fgetc(src)) != 0xff)
+	{
+		write(control, &eof, 1);
+	}
+	log_wrapper("Finished back up ", log, av[1]);
+	fclose(src);
+	close(control);
+	return (0);
+}
