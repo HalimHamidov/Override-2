@@ -16,11 +16,19 @@ void log_wrapper(char *string, FILE *logfile, char *filename)
 	// <+67>:    call   0x4006f0 <strcpy@plt>
 	strcpy(buffer, string);
 	
+	// <+115>:   repnz scas al,BYTE PTR es:[rdi]	; strlen
+
+	// <+174>:   repnz scas al,BYTE PTR es:[rdi] 	; strlen again
 	
 	// <+210>:   call   0x400740 <snprintf@plt>
+	snprintf(); dafuq
 	
-	
-	// <+230>:   call   0x400780 <strcspn@plt>
+	// <+215>:   lea    rax,[rbp-0x110]	; buffer
+   	// <+222>:   mov    esi, 0x400d4c	; "\n"
+   	// <+227>:   mov    rdi,rax
+   	// <+230>:   call   0x400780 <strcspn@plt>
+   	// <+235>:   mov    BYTE PTR [rbp+rax*1-0x110],0x0
+	buffer[strcspn(buffer, "\n")] = 0;
 	
 	
 	// <+243>:	mov    ecx,0x400d4e
