@@ -7,22 +7,18 @@ Le binaire, en 64bits,  comprends deux fonctions que nous devons analyser: main
 et log wrapper.
 
 Apres reversing, le binaire a un comportement assez simple: apres une
-verification du nombre d'arguments passés, il ouvre le fichier './backups/.log'
-et le fichier passé en argument. Un nouveau fichier est cree en fusionnant la
-chaine './backups' avec notre argument. Il copie ensuite le contenu du fichier
-passé en argument dans le nouveau fichier. Si tout s'est bien passé, le
-programme log le resultat de l'operation dans le fichier .backup.log et quite en
-netoyant derriẻre lui.
+verification du nombre d'arguments passés(si le nombre d'argument passe est different de deux, un usage est affiche, mais le programme continue)
+il ouvre le fichier './backups/.log' et le fichier passé en arguments. Un premier message est ecrit dans le log.
+Ensuite, Un nouveau fichier est cree en fusionnant la chaine './backups' avec notre argument. Le programme copie ensuite le contenu du fichier
+passé en argument dans le nouveau fichier. Enfin, il enregistre un message dans le fichier .backup.log et quitte.
 
-La vulnerabilité viens ici du fait que le dossier crée commence par './', un
+La vulnerabilité viens ici du fait que le dossier dans lequel le backup est crée commence par './', un
 chemin relatif. Cela nous permet donc de controler l'endroit ou le nouveau
-fichier sera crée.
+fichier sera crée en creant un dossier backup dans un dossier dans lequel nous avons les droits d'ecriture.
 
-Nous connaissons le chemin du fichier que nous voulons obtenir, il nous
-suffit donc de nous deplacer dans un dossier dans lequel nous avons les droits
-d'ecriture pour realiser notre exploit avec les commandes suivantes:
+Nous connaissons le chemin du fichier que nous voulons obtenir, donc l'exploit se fait simplement avec les commandes suivantes:
 
--- Nous deplacer dans le dossier dans lequel nous avons droit d'ecriture
+-- Nous deplacer dans le dossier dans lequel nous avons droit d'ecriture:
 
 > cd /tmp
 
