@@ -4,10 +4,41 @@
 #include <fcntl.h>
 #include <unistd.h>
 
-void log_wrapper(char *string, FILE *log, char *filename)
+void log_wrapper(char *string, FILE *logfile, char *filename)
 {
 	/* Fonction chargée d'ecrire dans le logfile, non essentielle pour l'exploit
 	 * */
+	// <+47>:    mov    rdx,QWORD PTR [rbp-0x120]
+   	// <+54>:    lea    rax,[rbp-0x110]
+	char	*buffer;
+   	// <+61>:    mov    rsi,rdx
+   	// <+64>:    mov    rdi,rax
+	// <+67>:    call   0x4006f0 <strcpy@plt>
+	strcpy(buffer, string);
+	
+	// <+115>:   repnz scas al,BYTE PTR es:[rdi]	; strlen
+
+	// <+174>:   repnz scas al,BYTE PTR es:[rdi] 	; strlen again
+	
+	// <+210>:   call   0x400740 <snprintf@plt>
+	snprintf(); dafuq
+	
+	// <+215>:   lea    rax,[rbp-0x110]	; buffer
+   	// <+222>:   mov    esi, 0x400d4c	; "\n"
+   	// <+227>:   mov    rdi,rax
+   	// <+230>:   call   0x400780 <strcspn@plt>
+   	// <+235>:   mov    BYTE PTR [rbp+rax*1-0x110],0x0
+	buffer[strcspn(buffer, "\n")] = 0;
+	
+	
+	// <+243>:	mov    ecx,0x400d4e
+    	// <+248>:	lea    rdx,[rbp-0x110]
+    	// <+255>:	mov    rax,QWORD PTR [rbp-0x118]
+    	// <+262>:	mov    rsi,rcx
+    	// <+265>:	mov    rdi,rax
+    	// <+268>:	mov    eax,0x0
+	// <+273>:   call   0x4007a0 <fprintf@plt>
+	fprintf(logfile, "LOG: %s\n", buffer);
 	return;
 }
 
