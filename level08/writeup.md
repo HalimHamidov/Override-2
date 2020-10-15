@@ -30,4 +30,4 @@ notre fichier cible:
 > /home/users/level08/level08 /home/users/level09/.pass
 
 -- Lire notre flag
-> cat home/users/level09/.pass
+> cat ./backups/home/users/level09/.pass
