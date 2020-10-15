@@ -16,7 +16,7 @@ Le dessassemblage de main nous permet de voir qu'un generateur de nombre aleatoi
 
 ![Capture d’écran 2020-10-05 à 23 40 01](https://user-images.githubusercontent.com/25014717/95136677-dbc34c00-0766-11eb-95cb-7b6d79b918fa.png)
 
-La fonction test commence soustraire le nombre que nous avons passe en paramettre a 0x1337d00d. Il y a ensuite une verification pour determiner si la difference est inferrieure a 0x15. L'instruction "ja" nous permet de savoir que c'est une difference entre deux entiers positifs. Si la difference entre le nombre passe et le nombre defini n'est pas inferieure a 0x15, la fonction decrypt est appele, mais avec un nombre aleatoire, ce que nous voulons eviter.
+La fonction test commence par soustraire le nombre que nous avons passe en paramettre a 0x1337d00d. Il y a ensuite une verification pour determiner si la difference est inferrieure a 0x15. L'instruction "ja" nous permet de savoir que c'est une difference entre deux entiers positifs. Si la difference entre le nombre passe et le nombre defini n'est pas inferieure a 0x15, la fonction decrypt est appele, mais avec un nombre aleatoire, ce que nous voulons eviter.
 
 
 ![Capture d’écran 2020-10-05 à 23 40 43](https://user-images.githubusercontent.com/25014717/95136675-da921f00-0766-11eb-9525-ff6dd63b7e12.png)

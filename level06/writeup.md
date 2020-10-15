@@ -20,7 +20,7 @@ if (auth(buffer_login, serial) == 0)
 
 Dans la fonction `auth()` notre login est utilisé pour générer une clé serial avec une fonction de chiffrage, et si cette clé correspond a celle que nous avons entrée, la fonction renvoie 0.
 
-##### Problème: La fonction est protéger avec un appel a `ptrace()` pour eviter le débugage.
+##### Problème: La fonction est protégé avec un appel a `ptrace()` pour eviter le débugage.
 
 ##### Solution: On catch le syscall ptrace, et établis une macro qui sera effectué avant: `set ($eax) = 0` ce qui remplacera l'appel systeme `26 ptrace` par le syscall `0 aucun`.
 
